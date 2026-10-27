@@ -6,18 +6,16 @@ import {
   FlatList,
   StyleSheet,
   Pressable,
-  useColorScheme,
   Platform,
 } from 'react-native';
 
 import { useExpenses } from '../store/expenses-context';
-import theme from '../constants/theme';
+import { useTema } from '../store/tema-context';
+import BotaoTema from '../components/despesa/BotaoTema';
 
 export default function DespesasRecentes({ navigation }) {
   const { expenses, isLoaded } = useExpenses();
-
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? theme.dark : theme.light;
+  const { cores: colors } = useTema();
 
   const recentExpenses = useMemo(() => {
     const now = new Date();
@@ -25,7 +23,6 @@ export default function DespesasRecentes({ navigation }) {
     sevenDaysAgo.setDate(now.getDate() - 7);
 
     return expenses.filter((expense) => {
-      // Interpreta a data como data local, evitando problemas de fuso horário.
       const expenseDate = new Date(`${expense.date}T12:00:00`);
 
       return (
@@ -80,14 +77,28 @@ export default function DespesasRecentes({ navigation }) {
 
   if (!isLoaded) {
     return (
-      <View style={[styles.loading, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text }}>Carregando despesas...</Text>
+      <View
+        style={[
+          styles.loading,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Text style={{ color: colors.text }}>
+          Carregando despesas...
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.background },
+      ]}
+    >
+      <BotaoTema />
+
       <Text style={[styles.title, { color: colors.text }]}>
         Despesas dos últimos 7 dias
       </Text>
@@ -113,7 +124,12 @@ export default function DespesasRecentes({ navigation }) {
               Nenhuma despesa recente
             </Text>
 
-            <Text style={{ color: colors.secondary, textAlign: 'center' }}>
+            <Text
+              style={{
+                color: colors.secondary,
+                textAlign: 'center',
+              }}
+            >
               Cadastre uma despesa para vê-la nesta lista.
             </Text>
           </View>

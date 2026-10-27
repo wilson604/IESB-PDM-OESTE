@@ -7,21 +7,20 @@ import {
   FlatList,
   StyleSheet,
   Pressable,
-  useColorScheme,
   Platform,
 } from 'react-native';
 
 import useDebounce from '../hooks/useDebounce';
 import { useExpenses } from '../store/expenses-context';
-import theme from '../constants/theme';
+import { useTema } from '../store/tema-context';
+import BotaoTema from '../components/despesa/BotaoTema';
 
 export default function TodasDespesas({ navigation }) {
   const { expenses, isLoaded } = useExpenses();
+  const { cores: colors } = useTema();
+
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 300);
-
-  const colorScheme = useColorScheme();
-  const colors = colorScheme === 'dark' ? theme.dark : theme.light;
 
   const filteredExpenses = useMemo(() => {
     const term = debouncedSearch.trim().toLowerCase();
@@ -71,14 +70,28 @@ export default function TodasDespesas({ navigation }) {
 
   if (!isLoaded) {
     return (
-      <View style={[styles.loading, { backgroundColor: colors.background }]}>
-        <Text style={{ color: colors.text }}>Carregando despesas...</Text>
+      <View
+        style={[
+          styles.loading,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <Text style={{ color: colors.text }}>
+          Carregando despesas...
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.background },
+      ]}
+    >
+      <BotaoTema />
+
       <Text style={[styles.title, { color: colors.text }]}>
         Todas as despesas
       </Text>
@@ -118,7 +131,13 @@ export default function TodasDespesas({ navigation }) {
             <Text style={[styles.emptyTitle, { color: colors.text }]}>
               Nenhuma despesa encontrada
             </Text>
-            <Text style={{ color: colors.secondary, textAlign: 'center' }}>
+
+            <Text
+              style={{
+                color: colors.secondary,
+                textAlign: 'center',
+              }}
+            >
               Toque no botão abaixo para cadastrar uma despesa.
             </Text>
           </View>

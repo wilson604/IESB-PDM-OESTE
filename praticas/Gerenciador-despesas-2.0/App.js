@@ -1,4 +1,5 @@
 
+import { TemaProvider } from './src/store/tema-context';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -76,11 +77,13 @@ function RootNavigator() {
 
 export default function App() {
   return (
-    <ExpensesContextProvider>
-      <NavigationContainer>
-        <StatusBar style="auto" />
-        <RootNavigator />
-      </NavigationContainer>
-    </ExpensesContextProvider>
+    <TemaProvider>
+      <ExpensesContextProvider>
+        <NavigationContainer>
+          <StatusBar style="auto" />
+          <RootNavigator />
+        </NavigationContainer>
+      </ExpensesContextProvider>
+    </TemaProvider>
   );
 }
